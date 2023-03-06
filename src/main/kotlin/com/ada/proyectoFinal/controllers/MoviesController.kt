@@ -24,11 +24,15 @@ class MoviesController {
 
     // URL -> /api/v1/movies/id
     @GetMapping("/{id}")
-    fun getOneMovie(@PathVariable id: String): ResponseEntity<Movie>{
+    fun getOneMovie(@PathVariable id: String): ResponseEntity<Any>{
         var idMovie: Long = id.toLong()
         var movie: Movie? = moviesService[idMovie]
 
-        return ResponseEntity<Movie>(movie, HttpStatus.OK)
+        return if (movie == null) {
+            ResponseEntity<Any>("MOVIE NOT FOUND", HttpStatus.NOT_FOUND)
+        } else {
+            ResponseEntity<Any>(movie, HttpStatus.OK)
+        }
     }
 
     // INSERT y DELETE
